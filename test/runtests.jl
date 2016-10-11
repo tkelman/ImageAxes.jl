@@ -1,4 +1,4 @@
-using Colors, ImageAxes, Base.Test
+using Colors, FixedPointNumbers, ImageAxes, Base.Test
 
 ambs = detect_ambiguities(ImageAxes,ImageCore,Base,Core)
 if !isempty(ambs)
@@ -85,7 +85,7 @@ end
 end
 
 @testset "grayscale" begin
-    A = AxisArray(rand(Gray{U8}, 4, 5), :y, :x)
+    A = AxisArray(rand(Gray{N0f8}, 4, 5), :y, :x)
     cv = channelview(A)
     @test axes(cv) == (Axis{:y}(1:4), Axis{:x}(1:5))
     @test spatialorder(cv) == (:y, :x)
@@ -93,7 +93,7 @@ end
 end
 
 @testset "color" begin
-    A = AxisArray(rand(RGB{U8}, 4, 5), :y, :x)
+    A = AxisArray(rand(RGB{N0f8}, 4, 5), :y, :x)
     cv = channelview(A)
     @test axes(cv) == (Axis{:color}(1:3), Axis{:y}(1:4), Axis{:x}(1:5))
     @test spatialorder(cv) == (:y, :x)
@@ -105,13 +105,13 @@ end
 
 # Possibly-ambiguous functions
 @testset "ambig" begin
-    A = AxisArray(rand(RGB{U8},3,5), :x, :y)
-    @test isa(convert(Array{RGB{U8},2}, A), Array{RGB{U8},2})
-    @test isa(convert(Array{Gray{U8},2}, A), Array{Gray{U8},2})
+    A = AxisArray(rand(RGB{N0f8},3,5), :x, :y)
+    @test isa(convert(Array{RGB{N0f8},2}, A), Array{RGB{N0f8},2})
+    @test isa(convert(Array{Gray{N0f8},2}, A), Array{Gray{N0f8},2})
 end
 
 @testset "internal" begin
-    A = AxisArray(rand(RGB{U8},3,5), :x, :y)
+    A = AxisArray(rand(RGB{N0f8},3,5), :x, :y)
     @test ImageAxes.axtype(A) == Tuple{Axis{:x,Base.OneTo{Int}}, Axis{:y,Base.OneTo{Int}}}
 end
 
